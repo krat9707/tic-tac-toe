@@ -1,0 +1,41 @@
+:root {
+    box-sizing: border-box;
+    --background-color: white;
+    --grid-background-color: rgb(127, 127, 127);
+}
+
+#wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    height: 100vh;
+    width: 100vw;
+}
+
+#layout {
+    flex: 1;
+    height: 75vh;
+    max-width: 75vh;
+    background-color: var(--grid-background-color);
+
+    display: grid;
+    gap: 2vh;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.box {
+    background-color: var(--background-color);
+}
+
+[data-token="1"] {
+    background: url(icons/circle.svg) no-repeat center center;
+    background-size: contain;
+    background-color: var(--background-color);
+}
+
+[data-token="2"] {
+    background: url(icons/cross.svg) no-repeat center center;
+    background-size: contain;
+    background-color: var(--background-color);
+}
