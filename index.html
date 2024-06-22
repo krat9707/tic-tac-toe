@@ -9,18 +9,51 @@
 </head>
 <body>
     <div id="wrapper">
-        <button id="start-match">Start</button>
-        <div id="layout">
-            <div class="box" id="box-1"></div>
-            <div class="box" id="box-2"></div>
-            <div class="box" id="box-3"></div>
-            <div class="box" id="box-4"></div>
-            <div class="box" id="box-5"></div>
-            <div class="box" id="box-6"></div>
-            <div class="box" id="box-7"></div>
-            <div class="box" id="box-8"></div>
-            <div class="box" id="box-9"></div>
+
+        <div id="game-flow-buttons">
+            
+            <button id="start-match">Start</button>
+            <dialog id="players-name">
+                <form>
+                    <label for="get-name-player-1">Player-1 (O): 
+                        <input type="text" id="get-name-player-1" placeholder="Player-1">
+                    </label>
+
+                    <label for="get-name-player-2">Player-2 (X): 
+                        <input type="text" id="get-name-player-2" placeholder="Player-2">
+                    </label>
+
+                    <div id="submit-after-getting-names" class="button">Start</div>
+                </form>
+            </dialog>
         </div>
+
+        <div id="player-names">
+        
+            <div id="player-1" class="button player">Player-1</div>
+            <div id="vs">V / S</div>
+            <div id="player-2" class="button player">Player-2</div>
+        
+        </div>
+
+        <div id="play-area">
+
+            <div id="layout">
+            
+                <div class="box" id="box-1"></div>
+                <div class="box" id="box-2"></div>
+                <div class="box" id="box-3"></div>
+                <div class="box" id="box-4"></div>
+                <div class="box" id="box-5"></div>
+                <div class="box" id="box-6"></div>
+                <div class="box" id="box-7"></div>
+                <div class="box" id="box-8"></div>
+                <div class="box" id="box-9"></div>
+            
+            </div>
+
+        </div>
+
     </div>
 </body>
 </html>

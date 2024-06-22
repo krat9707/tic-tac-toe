@@ -39,7 +39,7 @@ const GameBoard = () => {
             }
 
             if(flag)
-                return true;
+                return {bool: true, arr: [[i, 0], [i, 1], [i, 2]]};
         }
 
         for(let j = 0; j < 3; ++j)
@@ -55,16 +55,16 @@ const GameBoard = () => {
             }
 
             if(flag)
-                return true;
+                return {bool: true, arr: [[0, j], [1, j], [2, j]]};
         }
 
         if(board[0][0].getValue() === board[1][1].getValue() && board[0][0].getValue() === board[2][2].getValue() && board[1][1].getValue() != 0)
-            return true;
+            return {bool: true, arr: [[0, 0], [1, 1], [2, 2]]};
 
         if(board[2][0].getValue() === board[1][1].getValue() && board[2][0].getValue() === board[0][2].getValue() && board[1][1].getValue() != 0)
-            return true;
+            return {bool: true, arr: [[2, 0], [1, 1], [0, 2]]};
 
-        return false;
+        return {bool: false, arr: []};
     }
 
     const availableCells = () => {
@@ -103,18 +103,41 @@ const GameFlow = (playerOneName = `player1`, playerTwoName = `player2`) => {
     const players = [
         {
             name: playerOneName,
-            token: 1
+            token: 1,
+            marker: document.querySelector('#player-1')
         },
         {
             name: playerTwoName,
-            token: 2
+            token: 2,
+            marker: document.querySelector('#player-2')
         }
     ];
 
+    players[0].marker.classList.remove('winner');
+    players[0].marker.classList.remove('draw');
+    players[0].marker.classList.remove('active-player');
+
+    players[1].marker.classList.remove('winner');
+    players[1].marker.classList.remove('draw');
+    players[1].marker.classList.remove('active-player');
+
     let currentTurn = players[0];
+    currentTurn.marker.classList.add('active-player');
 
     const nextTurn = () => {
-        currentTurn = (currentTurn === players[0] ? players[1] : players[0]);
+        
+        if(currentTurn == players[0])
+        {
+            currentTurn.marker.classList.remove('active-player');
+            currentTurn = players[1];
+            currentTurn.marker.classList.add('active-player');
+        }
+        else
+        {
+            currentTurn.marker.classList.remove('active-player');
+            currentTurn = players[0];
+            currentTurn.marker.classList.add('active-player');
+        }
     };
 
     const getCurrentTurn = () => currentTurn;
@@ -131,18 +154,30 @@ const GameFlow = (playerOneName = `player1`, playerTwoName = `player2`) => {
     const playRound = (row, column, e) => {
 
         board.placeToken(row, column, getCurrentTurn().token);
-        e.target.setAttribute('data-token', getCurrentTurn().token);
+        e.target.innerHTML = `${getCurrentTurn().token == 1 ? 'O' : 'X'}`;
 
         printNewRound();    
 
-        if(board.checkResult())
+        if(board.checkResult().bool)
         {
+            getCurrentTurn().marker.classList.add('winner');
+
+            const ans = board.checkResult().arr;
+            ans.forEach(cell => 
+                document.querySelector(`div[data-row='${cell[0]}'][data-column='${cell[1]}']`).classList.add('winner')
+            );
+
             console.log(`${getCurrentTurn().name}'s the Winner!`);
             gameEnd = true;
             return;
         }
         else if(board.availableCells() === false)
         {
+            players[0].marker.classList.add('draw');
+            players[1].marker.classList.add('draw');
+
+            document.querySelectorAll('.box').forEach(box => box.classList.add('draw'));
+            
             console.log(`Draw Match!`);
             gameEnd = true;
             return;
@@ -167,7 +202,12 @@ const startMatch = () => {
 
         box.setAttribute('data-row', parseInt(index / 3));
         box.setAttribute('data-column', parseInt(index % 3));
+        box.classList.add('bouncy');
+        box.classList.remove('winner');
+        box.classList.remove('draw');
         
+        box.innerHTML = '';
+
         box.addEventListener('click', (e) => {
             row = parseInt(e.target.getAttribute('data-row'));
             column = parseInt(e.target.getAttribute('data-column'));
@@ -188,4 +228,24 @@ const startMatch = () => {
     }
 }
 
-document.querySelector('#start-match').addEventListener('click', () => startMatch());
+const getPlayerNames = (e) => {
+    e.preventDefault();
+    inputDialog.showModal();
+}
+
+let inputDialog = document.querySelector('#players-name');
+document.querySelector('#start-match').addEventListener('click', (e) => {
+    getPlayerNames(e);
+    startMatch();
+});
+
+document.querySelector('#submit-after-getting-names').addEventListener('click', () => {
+
+    const playerOneName = document.querySelector('#get-name-player-1').value || 'Player-1';
+    const playerTwoName = document.querySelector('#get-name-player-2').value || 'Player-2';
+
+    document.querySelector('#player-1').innerText = playerOneName;
+    document.querySelector('#player-2').innerText = playerTwoName;    
+
+    inputDialog.close(); 
+});
