@@ -235,6 +235,7 @@ const getPlayerNames = (e) => {
 
 let inputDialog = document.querySelector('#players-name');
 document.querySelector('#start-match').addEventListener('click', (e) => {
+    document.querySelector('body').setAttribute('style', 'filter: blur(4px)');
     getPlayerNames(e);
     startMatch();
 });
@@ -247,5 +248,6 @@ document.querySelector('#submit-after-getting-names').addEventListener('click', 
     document.querySelector('#player-1').innerText = playerOneName;
     document.querySelector('#player-2').innerText = playerTwoName;    
 
+    document.querySelector('body').removeAttribute('style');
     inputDialog.close(); 
 });
